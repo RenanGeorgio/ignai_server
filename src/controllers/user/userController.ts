@@ -2,8 +2,8 @@ import { NextFunction, Response } from "express";
 import { CustomRequest } from "../../helpers/customRequest";
 import User from "../../models/user/User";
 import authApi from "../../services/authApi";
-import { generateAccessToken } from "../../helpers/accessToken";
 import { isValid } from "../../helpers/validCpfCnpj";
+import SessionService from "../../services/sessionService";
 
 export const info = async (
     req: CustomRequest,
@@ -11,10 +11,11 @@ export const info = async (
     next: NextFunction
 ) => {
     try {
-        if (!req.user) {
+        const userId = req.body.userId;
+        if (!userId) {
             return res.status(403).send({ message: "Unauthorized" });
         }
-        const user = await User.findById(req.user._id);
+        const user = await User.findById(userId);
         if (!user) {
             return res.status(403).send({ message: "Unauthorized" });
         }
@@ -84,11 +85,10 @@ export const create = async (
                 company: response.data.company,
                 company_id: response.data.company_id,
             });
-            const token = generateAccessToken(
-                newUser._id,
-                newUser.email,
-                newUser.company,
-            );
+            const { token, refreshToken } = await SessionService({
+              userId: newUser._id,
+              name,
+            });
             return res.status(200).send({ token });
         } else {
             return res.status(400).send(response.data);
@@ -104,10 +104,11 @@ export const update = async (
     next: NextFunction
 ) => {
     try {
-        if (!req.user) {
+        const userId = req.body.userId;
+        if (!userId) {
             return res.status(403).send({ message: "Update unauthorized" });
         }
-        const user = await User.findById(req.user._id);
+        const user = await User.findById(userId);
         if (!user) {
             return res.status(403).send({ message: "Unauthorized" });
         }
