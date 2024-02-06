@@ -19,7 +19,7 @@ const JWT = async (req: CustomRequest, res: Response, next: NextFunction) => {
       return res.status(403).send({ message: "Invalid JWT." });
     }
     
-    req.body = { userId };
+    req.body = { ...req.body, userId };
     next();
   } catch (err: any) {
     if (err.name === "JsonWebTokenError") {

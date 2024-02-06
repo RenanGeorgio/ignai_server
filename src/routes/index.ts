@@ -7,6 +7,8 @@ import * as userController from "../controllers/user/userController";
 
 import * as authController from "../controllers/user/authController";
 
+import * as leadsController from "../controllers/leads/leadsController";
+
 const routes = Router();
 
 routes
@@ -21,4 +23,7 @@ routes
   .post("/user", userController.create)
   .get("/user", middlewares.JWT, userController.info)
 
+  // leads
+  .post("/leads", middlewares.JWT, leadsController.create)
+  .get("/leads", middlewares.JWT, leadsController.list)
 export default routes;
