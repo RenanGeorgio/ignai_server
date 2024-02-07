@@ -70,17 +70,19 @@ export const createItem = async (req: Request, res: Response, next: NextFunction
   }
 };
 
-export const updatePosition = async (req: Request, res: Response, next: NextFunction) => {
+// atualiza no drag and drop
+export const updateLeads = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { _id } = req.params;
-    const { position } = req.body;
 
-    const lead = await Leads.findOne
-    ({ _id });
+    const { leads } = req.body;
 
-    if(!lead) {
-      return res.status(404).send({ message: "Lead not found" });
-    }
+    /// melhorar query
+    leads.forEach(async (lead: any) => {
+      await Leads.updateOne({ _id: lead._id }, lead);
+    });
+    
+    return  res.status(204).send();
+    
   } catch (error) {
     next(error);
   }

@@ -26,6 +26,7 @@ routes
   // leads
   .post("/leads", middlewares.JWT, leadsController.create)
   .post("/leads/:_id/items", middlewares.JWT, leadsController.createItem)
+  .put("/leads?:_id", middlewares.JWT, leadsController.updateLeads)
   .get("/leads", middlewares.JWT, leadsController.list)
   .delete("/leads/:_id", middlewares.JWT, leadsController.remove)
   
