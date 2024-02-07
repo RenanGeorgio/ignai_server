@@ -81,7 +81,9 @@ export const updatePosition = async (req: Request, res: Response, next: NextFunc
     if(!lead) {
       return res.status(404).send({ message: "Lead not found" });
     }
-
+  } catch (error) {
+    next(error);
+  }
 };
 
 export const remove = async (req: Request, res: Response, next: NextFunction) => {
