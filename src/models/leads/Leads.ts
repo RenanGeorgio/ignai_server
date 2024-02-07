@@ -9,64 +9,19 @@ const LeadsSchema = new Schema({
     type: String,
     required: true,
   },
-  topic: {
-    type: String,
-    required: true,
-    enum: ["INITIAL_CONTACT", "DISCUSSIONS", "DECISION_MAKING", "CONTRACT"],
-  },
-  lead: {
-    name: {
-      type: String,
-      required: true,
-    },
-    description: {
-      type: String,
-      required: false,
-    },
-  },
-  leadOrigin: {
-    type: String,
-    required: true,
-    enum: ["EMAIL", "WHATSAPP", "OTHER"],
-  },
-  company: {
-    type: String,
-  },
-  idNumber: {
-    // CPF ou CNPJ
+  title: {
+    // Título do lead
     type: String,
     required: true,
   },
-  assignedEmployees: {
-    type: [String],
-    required: true,
-  },
-  files: {
-    type: [String],
-    required: false,
-  },
-  activity: [
+  items: [
     {
-      type: {
-        userName: {
-          type: String,
-          required: true,
-        },
-        comment: {
-          text: {
-            type: String,
-            required: true,
-          },
-        },
-        timestamp: {
-          type: Date,
-          default: Date.now,
-        },
+      content: {
+        type: String,
+        required: true,
       },
-      required: true,
-    },
+    }
   ],
-
   createdAt: {
     type: Date,
     default: Date.now,
