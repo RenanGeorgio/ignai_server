@@ -15,11 +15,16 @@ const LeadsSchema = new Schema({
     required: true,
   },
   items: [
+    // Cards
     {
-      content: {
+      title: {
         type: String,
         required: true,
       },
+      comments: {
+        type: String,
+        required: false,
+      }
     }
   ],
   createdAt: {

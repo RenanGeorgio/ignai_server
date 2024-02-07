@@ -49,10 +49,10 @@ export const create = async (
   }
 };
 
-export const createItem = async (req: Request, res: Response, next: NextFunction) => {
+export const createCard = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { _id } = req.params;
-    const { content } = req.body;
+    const { title } = req.body;
 
     const lead = await Leads.findOne({ _id });
 
@@ -60,7 +60,7 @@ export const createItem = async (req: Request, res: Response, next: NextFunction
       return res.status(404).send({ message: "Lead not found" });
     }
 
-    lead.items.push({ content });
+    lead.items.push({ title });
 
     await lead.save();
 
@@ -82,7 +82,33 @@ export const updateLeads = async (req: Request, res: Response, next: NextFunctio
     });
     
     return  res.status(204).send();
+
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateCardInfo = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+
+    const { _id } = req.params;
+    const { title, comments } = req.body;
+
+    const card = await Leads.findOne({ items: { $elemMatch: { _id } } });
+
+    if(!card) {
+      return res.status(404).send({ message: "Card not found" });
+    }
+
+    const cardIndex = card.items.findIndex((item: any) => item._id == _id);
+
+    card.items[cardIndex].title = title;
+    card.items[cardIndex].comments = comments;
+
+    const updatedCardInfo = await card.save();
     
+    res.status(200).send(updatedCardInfo);
+
   } catch (error) {
     next(error);
   }
