@@ -83,7 +83,7 @@ export const create = async (
                 name,
                 cpf,
                 company: response.data.company,
-                company_id: response.data.company_id,
+                companyId: response.data.company_id,
             });
             const { token, refreshToken } = await SessionService({
               userId: newUser._id,
