@@ -5,7 +5,17 @@ import { AxiosError } from "axios";
 import Leads from "../../models/leads/Leads";
 
 export const list = async (req: Request, res: Response) => {
-  const leads = await Leads.find();
+
+  const { userId } = req.body;
+
+  const checkUser = await User.findOne({ _id: userId });
+  
+  if(!checkUser) {
+    return res.status(404).send({ message: "User not found" });
+  }
+
+  const leads = await Leads.find({ companyId: checkUser.companyId });
+  console.log(leads)
   return res.status(200).send(leads);
 };
 
@@ -15,30 +25,16 @@ export const create = async (
   next: NextFunction
 ) => {
   try {
-    // const { userId, companyId, topic, lead, company, leadOrigin, idNumber, assignedEmployees, files, activity } = req.body;
-    // todo: implementar validação do nivel de acesso
+    const { title, userId } = req.body;
 
-    // const checkIfLeadExist = await Leads.findOne({ $and: [{ companyId }, { idNumber }] });
-    
-    // if (checkIfLeadExist) {
-    //   return res.status(409).send({ message: "Lead already exists" });
-    // }
+    const checkUser = await User.findOne({ _id: userId });
 
-    // const leadRepository = await Leads.create({
-    //   companyId,
-    //   topic,
-    //   lead,
-    //   company,
-    //   leadOrigin,
-    //   idNumber,
-    //   assignedEmployees,
-    //   files,
-    //   activity,
-    // });
+    if (!checkUser) {
+      return res.status(404).send({ message: "User not found" });
+    }
 
-    const { title, companyId, items } = req.body;
     const leadRepository = await Leads.create({
-      companyId: "1",
+      companyId: checkUser.companyId,
       title,
     });
 
