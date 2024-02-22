@@ -1,11 +1,17 @@
 import "express-async-errors";
 import * as dotenv from "dotenv";
 dotenv.config();
-import app from "./server";
+import server from "./server";
+import { Server } from "socket.io";
 
 const PORT = process.env.PORT || 7000;
 const HOST = process.env.HOST || "http://localhost";
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server running on ${HOST}:${PORT}`);
 });
+
+const io = new Server(server);
+
+import "./services";
+export { io };

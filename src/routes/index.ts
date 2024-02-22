@@ -9,6 +9,10 @@ import * as authController from "../controllers/user/authController";
 
 import * as leadsController from "../controllers/leads/leadsController";
 
+import * as chatController from "../controllers/chat/chatController";
+
+import * as messageController from "../controllers/chat/messageController";
+
 const routes = Router();
 
 routes
@@ -37,4 +41,19 @@ routes
   // Deleta uma lead (coluna)
   .delete("/leads/:_id", middlewares.JWT, leadsController.remove)
   
+
+  // ----- Chat -----
+  // Cria um chat
+  .post("/api/chat", middlewares.JWT, chatController.createChat)
+  // Busca um chat
+  .post("/api/chat/:chatId", middlewares.JWT, chatController.getChat)
+  // Lista todos os chats de um usuário
+  .get("/api/chat", middlewares.JWT, chatController.findUserChats)
+
+  // ----- Mensagens -----
+  // Cria uma mensagem
+  .post("/api/message", middlewares.JWT, messageController.createMessage)
+  // Lista todas as mensagens de um chat
+  .get("/api/message/:chatId", middlewares.JWT, messageController.getMessages)
+
 export default routes;
