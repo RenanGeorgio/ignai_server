@@ -32,7 +32,6 @@ export const createChat = async (req: Request, res: Response) => {
 
 export const findUserChats = async (req: Request, res: Response) => {
   const { userId } = req.params;
-
   try {
     const chats = await Chat.find({
       members: { $in: [userId] },
@@ -46,9 +45,9 @@ export const findUserChats = async (req: Request, res: Response) => {
   }
 }
 
-export const getChat = async (req: Request, res: Response) => {
-  const { firstId, secondId } = req.body;
-
+export const findChat = async (req: Request, res: Response) => {
+  const { firstId, secondId } = req.params;
+  
   try {
     const chat = await Chat.findOne({
       members: { $all: [firstId, secondId] },

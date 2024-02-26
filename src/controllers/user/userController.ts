@@ -20,6 +20,7 @@ export const info = async (
             return res.status(403).send({ message: "Unauthorized" });
         }
         const info = {
+            _id: user._id,
             name: user.name,
             company: user.company,
             email: user.email

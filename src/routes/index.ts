@@ -5,6 +5,8 @@ import * as serverController from "../controllers/server/serverController";
 
 import * as userController from "../controllers/user/userController";
 
+import * as clientController from "../controllers/chat/clientController";
+
 import * as authController from "../controllers/user/authController";
 
 import * as leadsController from "../controllers/leads/leadsController";
@@ -43,12 +45,22 @@ routes
   
 
   // ----- Chat -----
+  
+  // cria um cliente
+  .post("/api/client", clientController.createClient)
+  // lista todos os clientes
+  .get("/api/clients", clientController.listClients)
+  // busca um cliente
+  .get("/api/client/email/:email", clientController.findClientByEmail)
+  // busca um cliente
+  .get("/api/client/:_id", clientController.findClientById)
+
   // Cria um chat
   .post("/api/chat", middlewares.JWT, chatController.createChat)
-  // Busca um chat
-  .post("/api/chat/:chatId", middlewares.JWT, chatController.getChat)
   // Lista todos os chats de um usuário
-  .get("/api/chat", middlewares.JWT, chatController.findUserChats)
+  .get("/api/chat/:userId", middlewares.JWT, chatController.findUserChats)
+  // Busca um chat
+  .get("/api/chat/find/:firstId/:secondId", middlewares.JWT, chatController.findChat)
 
   // ----- Mensagens -----
   // Cria uma mensagem
