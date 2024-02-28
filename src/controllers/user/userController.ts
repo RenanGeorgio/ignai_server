@@ -23,6 +23,7 @@ export const info = async (
             _id: user._id,
             name: user.name,
             company: user.company,
+            companyId: user.companyId,
             email: user.email
         }
         return res.status(200).send(info);
