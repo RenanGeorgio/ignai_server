@@ -1,6 +1,6 @@
 import { io } from "../../app";
 import { OnlineUser } from "../../types/types";
-
+            // connect to second app
 const ChatService = () => {
   let onlineUsers: OnlineUser[] = [];
 
@@ -15,7 +15,6 @@ const ChatService = () => {
     });
 
     socket.on("sendMessage", (message: any) => {
-      console.log(message)
       const receiver = onlineUsers.find(
         (user: any) => user.userId === message.recipientId
       );
@@ -31,6 +30,11 @@ const ChatService = () => {
         (user: any) => user.socketId !== socket.id
       );
       io.emit("onlineUsers", onlineUsers);
+    });
+
+    socket.on("newClientChat", (data: any) => {
+      // avisar o front que um novo chat foi criado
+      io.emit("newUserChat", data);
     });
   });
 };
