@@ -1,6 +1,6 @@
-import Chat from "../../models/chat/chat";
+import Chat from "../../models/chat/chatModel";
 import { Request, Response, NextFunction } from "express";
-import User from "../../models/user/User";
+import User from "../../models/user/userModel";
 
 export const createChat = async (req: Request, res: Response) => {
   const { firstId, secondId, origin } = req.body;

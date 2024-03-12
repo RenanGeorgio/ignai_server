@@ -1,6 +1,6 @@
 import { NextFunction, Response } from "express";
 import { CustomRequest } from "../../helpers/customRequest";
-import User from "../../models/user/User";
+import User from "../../models/user/userModel";
 import authApi from "../../services/authApi";
 import { isValid } from "../../helpers/validCpfCnpj";
 import SessionService from "../../services/sessionService";

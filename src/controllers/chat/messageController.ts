@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import messageModel from "../../models/chat/message";
+import messageModel from "../../models/chat/messageModel";
 
 export const createMessage = async (req: Request, res: Response) => {
   const { chatId, senderId, text } = req.body;

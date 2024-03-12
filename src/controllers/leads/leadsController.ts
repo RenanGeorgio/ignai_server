@@ -1,4 +1,4 @@
-import User from "../../models/user/User";
+import User from "../../models/user/userModel";
 import { Request, Response, NextFunction } from "express";
 import RefreshTokenService from "../../services/refreshTokenService";
 import { AxiosError } from "axios";

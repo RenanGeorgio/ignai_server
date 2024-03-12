@@ -5,7 +5,7 @@ import * as serverController from "../controllers/server/serverController";
 
 import * as userController from "../controllers/user/userController";
 
-import * as clientController from "../controllers/chat/clientController";
+import * as chatClientController from "../controllers/chat/chatClientController";
 
 import * as authController from "../controllers/user/authController";
 
@@ -14,6 +14,10 @@ import * as leadsController from "../controllers/leads/leadsController";
 import * as chatController from "../controllers/chat/chatController";
 
 import * as messageController from "../controllers/chat/messageController";
+
+import * as clientController from "../controllers/client/clientController";
+
+import * as contactController from "../controllers/client/contactController";
 
 const routes = Router();
 
@@ -45,15 +49,14 @@ routes
   
 
   // ----- Chat -----
-  
-  // cria um cliente
-  .post("/api/client", clientController.createClient)
+  // cria um cliente do chat
+  .post("/api/chat/client", chatClientController.createClient)
   // lista todos os clientes
-  .get("/api/clients", clientController.listClients)
+  .get("/api/chat/clients", chatClientController.listClients)
   // busca um cliente
-  .get("/api/client/email/:email", clientController.findClientByEmail)
+  .get("/api/chat/client/email/:email", chatClientController.findClientByEmail)
   // busca um cliente
-  .get("/api/client/:_id", clientController.findClientById)
+  .get("/api/chat/client/:_id", chatClientController.findClientById)
 
   // Cria um chat
   .post("/api/chat", middlewares.JWT, chatController.createChat)
@@ -64,8 +67,17 @@ routes
 
   // ----- Mensagens -----
   // Cria uma mensagem
-  .post("/api/message", middlewares.JWT, messageController.createMessage)
+  .post("/api/chat/message", middlewares.JWT, messageController.createMessage)
   // Lista todas as mensagens de um chat
-  .get("/api/message/:chatId", middlewares.JWT, messageController.getMessages)
+  .get("/api/chat/message/:chatId", middlewares.JWT, messageController.getMessages)
+
+  // Clientes
+  // Cria um cliente
+
+  .post("/client", middlewares.JWT, clientController.create)
+
+  .post("/client/contact", middlewares.JWT, contactController.createContact)
+  .post("/client/address", middlewares.JWT, contactController.createAddress)
+  .get("/client/contact/:client", middlewares.JWT, contactController.findContact)
 
 export default routes;
