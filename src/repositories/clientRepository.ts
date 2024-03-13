@@ -2,6 +2,7 @@ import clientsModel from "../models/client/clientModel";
 import { IClient } from "../types/interfaces";
 import contactModel from "../models/client/contactModel";
 import { Error } from "mongoose";
+import { findUser } from "./userRepository";
 
 export async function createNewClient({
   name,
@@ -60,4 +61,9 @@ export async function createNewClient({
   } finally {
     await session.endSession();
   }
+}
+
+export async function listClients(companyId: string) {
+  const clients = await clientsModel.find({ companyId });
+  return clients;
 }

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { IAddress, IContactInfo } from "../../types/interfaces";
-import { createNewClient } from "../../repositories/clientRepository";
+import { createNewClient, listClients } from "../../repositories/clientRepository";
 import { findUser } from "../../repositories/userRepository";
 
 interface IRequestBody {
@@ -45,6 +45,26 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
       });
     }
 
+    return res.status(200).send(client);
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+};
+
+export const list = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const user = await findUser(req.body.userId);
+
+    if (!user) {
+      return res.status(400).send({ message: "User not found" });
+    }
+
+    const client = await listClients(user.companyId);
+
+    if (!client) {
+      return res.status(400).send({ message: "Client not found" });
+    }
+    
     return res.status(200).send(client);
   } catch (error: any) {
     res.status(500).send(error.message);

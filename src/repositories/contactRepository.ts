@@ -105,3 +105,8 @@ export async function findClientContact(clientId: string) {
   const contact = await contactModel.findOne({ client: clientId })
   return contact;
 }
+
+export async function findClientAddress(clientId: string) {
+  const address = await contactModel.findOne({ client: clientId })
+  return address;
+}

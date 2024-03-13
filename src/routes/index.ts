@@ -75,7 +75,7 @@ routes
   // Cria um cliente
 
   .post("/client", middlewares.JWT, clientController.create)
-
+  .get("/clients", middlewares.JWT, clientController.list)
   .post("/client/contact", middlewares.JWT, contactController.createContact)
   .post("/client/address", middlewares.JWT, contactController.createAddress)
   .get("/client/contact/:client", middlewares.JWT, contactController.findContact)
