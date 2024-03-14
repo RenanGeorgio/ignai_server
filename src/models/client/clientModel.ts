@@ -1,4 +1,5 @@
 import mongoose from "../../database";
+import contactsSchema from "./contactSchema";
 
 const { Schema } = mongoose;
 
@@ -37,6 +38,10 @@ const clientsSchema = new Schema({
   companyId: {
     type: String,
     required: true,
+  },
+  contact: {
+    type: contactsSchema,
+    default: {},
   },
   createdAt: {
     type: Date,

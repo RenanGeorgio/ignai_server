@@ -15,9 +15,9 @@ interface IRequestBody {
 
 export const create = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, email, tel, priority, sector, contactInfo, address }: IRequestBody = req.body;
+    const { name, email, tel, priority, sector, address }: IRequestBody = req.body;
    
-    if (!name || !email || !tel || !priority || !sector || !contactInfo || !address) {
+    if (!name || !email || !tel || !priority || !sector) {
       return res.status(400).send({ message: "Missing required fields" });
     }
     
@@ -33,9 +33,7 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
       email, 
       tel, 
       priority, 
-      sector, 
-      contactInfo, 
-      address 
+      sector
     });
     
     if (!client) {

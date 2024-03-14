@@ -1,6 +1,6 @@
 import clientsModel from "../models/client/clientModel";
 import { IClient } from "../types/interfaces";
-import contactModel from "../models/client/contactModel";
+import contactModel from "../models/client/contactSchema";
 import { Error } from "mongoose";
 import { findUser } from "./userRepository";
 
@@ -10,8 +10,6 @@ export async function createNewClient({
   tel,
   priority,
   sector,
-  contactInfo,
-  address,
   companyId,
 }: IClient) {
   const session = await clientsModel.startSession();
@@ -35,13 +33,6 @@ export async function createNewClient({
           companyId,
         },
       ],
-      { session }
-    );
-
-    const clientId = client[0]._id;
-
-    const contact = await contactModel.create(
-      [{ client: clientId, contactInfo, address }],
       { session }
     );
 

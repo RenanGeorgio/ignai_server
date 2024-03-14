@@ -76,8 +76,7 @@ routes
 
   .post("/client", middlewares.JWT, clientController.create)
   .get("/clients", middlewares.JWT, clientController.list)
-  .post("/client/contact", middlewares.JWT, contactController.createContact)
-  .post("/client/address", middlewares.JWT, contactController.createAddress)
-  .get("/client/contact/:client", middlewares.JWT, contactController.findContact)
+  .post("/client/:client/contact", middlewares.JWT, contactController.createContact)
+  .post("/client/:client/address", middlewares.JWT, contactController.createAddress)
 
 export default routes;

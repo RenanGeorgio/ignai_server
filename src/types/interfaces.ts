@@ -12,22 +12,26 @@ export interface IClient {
   priority: string;
   sector: string;
   status?: boolean;
-  contactInfo: IContactInfo;
-  address: IAddress;
+  contact?: IContactInfo;
   companyId: string;
 };
 
+export interface IContact {
+  contactInfo: IContactInfo;
+  address: IAddress;
+};
+
 export interface IContactInfo {
-  client: Schema.Types.ObjectId
+  clientId?: String;
   contactName: string;
   email: string;
-  status: boolean;
+  status?: boolean;
   tel: string;
   state: string;
 };
 
 export interface IAddress {
-  client: Schema.Types.ObjectId
+  client: String
   name: string;
   street: string;
   number: Number;

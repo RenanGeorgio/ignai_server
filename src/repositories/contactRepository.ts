@@ -1,42 +1,49 @@
 import { Mongoose } from "mongoose";
-import contactModel from "../models/client/contactModel";
+import contactModel from "../models/client/contactSchema";
 import { IAddress, IContactInfo } from "../types/interfaces";
 import { Error } from "mongoose";
+import clientModel from "../models/client/clientModel";
 
 export async function createNewContact({
-  client,
+  clientId,
   contactName,
   email,
   status,
   tel,
   state,
 }: IContactInfo) {
-  const checkContact = await contactModel.findOne({ client: client });
   try {
-    if (!checkContact) {
-      await contactModel.create({
-        client,
-        contactInfo: {
-          contactName,
-          email,
-          status,
-          tel,
-          state,
-        },
-      });
-    } else {
-      checkContact.contactInfo.push({
-        contactName,
-        email,
-        status,
-        tel,
-        state,
-      });
-      await checkContact.save();
+    const client = await clientModel.findOne({
+      "contact.contactInfo": { $elemMatch: { email } },
+    });
+
+    if (client) {
+      return {
+        success: false,
+        message: "Contact already exists",
+      };
     }
 
-    return checkContact;
+    const createContact = await clientModel.findByIdAndUpdate(
+      { _id: clientId },
+      {
+        $push: {
+          "contact.contactInfo": {
+            contactName,
+            email,
+            status,
+            tel,
+            state,
+          },
+        },
+      },
+      { safe: true, upsert: true, new: true }
+    );
+
+    console.log(createContact);
+    return createContact;
   } catch (error: any) {
+    console.log(error);
     if (error instanceof Error.ValidationError) {
       const messages = Object.values(error.errors).map((err) => err.message);
       return {
@@ -99,14 +106,4 @@ export async function createNewAddress({
       };
     }
   }
-}
-
-export async function findClientContact(clientId: string) {
-  const contact = await contactModel.findOne({ client: clientId })
-  return contact;
-}
-
-export async function findClientAddress(clientId: string) {
-  const address = await contactModel.findOne({ client: clientId })
-  return address;
 }

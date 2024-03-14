@@ -22,23 +22,8 @@ const addressSchema = new Schema({
 });
 
 const contactsSchema = new Schema({
-  client: {
-    type: Schema.Types.ObjectId,
-    ref: "clients",
-    required: true,
-  },
-  contactInfo: [contactInfoSchema],
-  address: [addressSchema],
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now,
-  },
+  contactInfo: { type: [contactInfoSchema], default: [] },
+  address: { type: [addressSchema], default: [] },
 });
 
-const contactModel = mongoose.model("contacts", contactsSchema);
-
-export default contactModel;
+export default contactsSchema;
