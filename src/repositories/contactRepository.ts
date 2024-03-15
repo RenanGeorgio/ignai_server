@@ -3,6 +3,7 @@ import contactModel from "../models/client/contactSchema";
 import { IAddress, IContactInfo } from "../types/interfaces";
 import { Error } from "mongoose";
 import clientModel from "../models/client/clientModel";
+import { mongoErrorHandler } from "../helpers/errorHandler";
 
 export async function createNewContact({
   clientId,
@@ -18,45 +19,35 @@ export async function createNewContact({
     });
 
     if (client) {
-      return {
-        success: false,
-        message: "Contact already exists",
-      };
+      return null;
     }
 
-    const createContact = await clientModel.findByIdAndUpdate(
-      { _id: clientId },
-      {
-        $push: {
-          "contact.contactInfo": {
-            contactName,
-            email,
-            status,
-            tel,
-            state,
+    const createContact = await clientModel
+      .findByIdAndUpdate(
+        { _id: clientId },
+        {
+          $push: {
+            "contact.contactInfo": {
+              contactName,
+              email,
+              status,
+              tel,
+              state,
+            },
           },
         },
-      },
-      { safe: true, upsert: true, new: true }
-    );
+        { safe: true, upsert: true, new: true }
+      )
+      .select("contact.contactInfo");
 
-    console.log(createContact);
-    return createContact;
+    return createContact.contact.contactInfo;
   } catch (error: any) {
-    console.log(error);
-    if (error instanceof Error.ValidationError) {
-      const messages = Object.values(error.errors).map((err) => err.message);
-      return {
-        success: false,
-        message: "Could not create user due to some invalid fields!",
-        error: messages,
-      };
-    }
+    return mongoErrorHandler(error);
   }
 }
 
 export async function createNewAddress({
-  client,
+  clientId,
   name,
   street,
   number,
@@ -66,44 +57,59 @@ export async function createNewAddress({
   zipCode,
 }: IAddress) {
   try {
-    const checkAddress = await contactModel.findOne({ client: client });
-
-    if (!checkAddress) {
-      await contactModel.create({
-        client,
-        address: {
-          name,
-          street,
-          number,
-          district,
-          city,
-          state,
-          zipCode,
+    const createAddress = await clientModel.findByIdAndUpdate(
+      { _id: clientId },
+      {
+        $push: {
+          "contact.address": {
+            name,
+            street,
+            number,
+            district,
+            city,
+            state,
+            zipCode,
+          },
         },
-      });
-    } else {
-      checkAddress.address.push({
-        name,
-        street,
-        number,
-        district,
-        city,
-        state,
-        zipCode,
-      });
-      await checkAddress.save();
-    }
+      },
+      { safe: true, upsert: true, new: true }
+    );
 
-    return checkAddress;
+    return createAddress;
   } catch (error: any) {
-    console.log(error);
-    if (error instanceof Error.ValidationError) {
-      const messages = Object.values(error.errors).map((err) => err.message);
-      return {
-        success: false,
-        message: "Could not create user due to some invalid fields!",
-        error: messages,
-      };
-    }
+    return mongoErrorHandler(error);
+  }
+}
+
+export async function updateContactInfo({
+  clientId,
+  _id: contactId,
+  contactName,
+  email,
+  status,
+  tel,
+  state,
+}: IContactInfo) {
+  try {
+    const updateContact = await clientModel.findOneAndUpdate(
+      {
+        _id: clientId,
+        "contact.contactInfo._id": contactId,
+      },
+      {
+        $set: {
+          "contact.contactInfo.$.contactName": contactName,
+          "contact.contactInfo.$.email": email,
+          "contact.contactInfo.$.status": status,
+          "contact.contactInfo.$.tel": tel,
+          "contact.contactInfo.$.state": state,
+        },
+      },
+      { new: true }
+    ).select("contact.contactInfo");
+
+    return updateContact?.contact.contactInfo;
+  } catch (error: any) {
+    return mongoErrorHandler(error);
   }
 }

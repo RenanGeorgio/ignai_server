@@ -1,8 +1,8 @@
 import clientsModel from "../models/client/clientModel";
 import { IClient } from "../types/interfaces";
 import contactModel from "../models/client/contactSchema";
-import { Error } from "mongoose";
 import { findUser } from "./userRepository";
+import { mongoErrorHandler } from "../helpers/errorHandler";
 
 export async function createNewClient({
   name,
@@ -41,14 +41,7 @@ export async function createNewClient({
     return client[0];
   } catch (error) {
     await session.endSession();
-    if (error instanceof Error.ValidationError) {
-      const messages = Object.values(error.errors).map((err) => err.message);
-      return {
-        success: false,
-        message: "Could not create user due to some invalid fields!",
-        error: messages,
-      };
-    }
+    return mongoErrorHandler(error);
   } finally {
     await session.endSession();
   }
@@ -57,4 +50,29 @@ export async function createNewClient({
 export async function listClients(companyId: string) {
   const clients = await clientsModel.find({ companyId });
   return clients;
+}
+
+export async function updateClient({
+  _id,
+  name,
+  email,
+  tel,
+  priority,
+  sector,
+  status
+}: Omit<IClient, "companyId">) {
+  try {
+    const client = await clientsModel.findByIdAndUpdate({ _id }, {
+      name,
+      email,
+      tel,
+      priority,
+      sector,
+      status
+    }, { new: true });
+    
+    return client;
+  } catch (error: any) {
+    return mongoErrorHandler(error);
+  }
 }

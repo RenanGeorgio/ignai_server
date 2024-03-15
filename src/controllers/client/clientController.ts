@@ -1,21 +1,11 @@
 import { Request, Response, NextFunction } from "express";
-import { IAddress, IContactInfo } from "../../types/interfaces";
-import { createNewClient, listClients } from "../../repositories/clientRepository";
+import { IAddress, IClient, IContactInfo } from "../../types/interfaces";
+import { createNewClient, listClients, updateClient } from "../../repositories/clientRepository";
 import { findUser } from "../../repositories/userRepository";
-
-interface IRequestBody {
-  name: string;
-  email: string;
-  tel: string;
-  priority: string;
-  sector: string;
-  contactInfo: IContactInfo;
-  address: IAddress;
-}
 
 export const create = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { name, email, tel, priority, sector, address }: IRequestBody = req.body;
+    const { name, email, tel, priority, sector, address }: IClient = req.body;
    
     if (!name || !email || !tel || !priority || !sector) {
       return res.status(400).send({ message: "Missing required fields" });
@@ -38,7 +28,7 @@ export const create = async (req: Request, res: Response, next: NextFunction) =>
     
     if (!client) {
       return res.status(400).send({ 
-        message: "Client already exists",
+        message: "Cliente Já existe!",
         success: false
       });
     }
@@ -63,6 +53,44 @@ export const list = async (req: Request, res: Response, next: NextFunction) => {
       return res.status(400).send({ message: "Client not found" });
     }
     
+    return res.status(200).send(client);
+  } catch (error: any) {
+    res.status(500).send(error.message);
+  }
+};
+
+export const update = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { name, email, tel, priority, sector, status }: IClient = req.body;
+    const { clientId } = req.params;
+
+    if (!name || !email || !tel || !priority || !sector) {
+      return res.status(400).send({ message: "Missing required fields" });
+    }
+    
+    const user = await findUser(req.body.userId);
+
+    if (!user) {
+      return res.status(400).send({ message: "User not found" });
+    }
+
+    const client = await updateClient({
+      _id: clientId,
+      name, 
+      email, 
+      tel, 
+      priority, 
+      sector,
+      status
+    });
+    
+    if (!client) {
+      return res.status(400).send({ 
+        message: "Cliente Já existe!",
+        success: false
+      });
+    }
+
     return res.status(200).send(client);
   } catch (error: any) {
     res.status(500).send(error.message);

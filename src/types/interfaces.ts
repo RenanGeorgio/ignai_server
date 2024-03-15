@@ -6,6 +6,7 @@ export interface IJwtPayload {
 }
 
 export interface IClient {
+  _id?: string;
   name: string;
   email: string;
   tel: string;
@@ -22,6 +23,7 @@ export interface IContact {
 };
 
 export interface IContactInfo {
+  _id?: string;
   clientId?: String;
   contactName: string;
   email: string;
@@ -31,7 +33,7 @@ export interface IContactInfo {
 };
 
 export interface IAddress {
-  client: String
+  clientId?: String
   name: string;
   street: string;
   number: Number;

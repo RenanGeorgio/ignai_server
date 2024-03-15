@@ -27,7 +27,7 @@ export const createClient = async (req: Request, res: Response) => {
 
     const savedChatUser = await client.save();
 
-    return res.status(200).json(savedChatUser);
+    return res.status(201).json(savedChatUser);
   } catch (error: any) {
     res.status(500).json(error.message);
   }
