@@ -1,7 +1,5 @@
 import clientsModel from "../models/client/clientModel";
 import { IClient } from "../types/interfaces";
-import contactModel from "../models/client/contactSchema";
-import { findUser } from "./userRepository";
 import { mongoErrorHandler } from "../helpers/errorHandler";
 
 export async function createNewClient({

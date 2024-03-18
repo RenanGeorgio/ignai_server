@@ -13,13 +13,9 @@ export interface IClient {
   priority: string;
   sector: string;
   status?: boolean;
-  contact?: IContactInfo;
+  contacts?: IContactInfo;
+  adresses?: IAddress;
   companyId: string;
-};
-
-export interface IContact {
-  contactInfo: IContactInfo;
-  address: IAddress;
 };
 
 export interface IContactInfo {

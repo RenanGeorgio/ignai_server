@@ -14,7 +14,7 @@ export const create = async (
   next: NextFunction
 ) => {
   try {
-    const { name, email, tel, priority, sector, address }: IClient = req.body;
+    const { name, email, tel, priority, sector }: IClient = req.body;
 
     if (!name || !email || !tel || !priority || !sector) {
       return res.status(400).send({ message: "Missing required fields" });
