@@ -59,19 +59,38 @@ export async function updateClient({
   tel,
   priority,
   sector,
-  status
+  status,
 }: Omit<IClient, "companyId">) {
   try {
-    const client = await clientsModel.findByIdAndUpdate({ _id }, {
-      name,
-      email,
-      tel,
-      priority,
-      sector,
-      status
-    }, { new: true });
-    
+    const client = await clientsModel.findByIdAndUpdate(
+      { _id },
+      {
+        name,
+        email,
+        tel,
+        priority,
+        sector,
+        status,
+      },
+      { new: true }
+    );
+
     return client;
+  } catch (error: any) {
+    return mongoErrorHandler(error);
+  }
+}
+
+export async function deleteClient({ clientId, companyId }: any) {
+  try {
+    const client = await clientsModel.findOneAndDelete({
+      $and: [{ _id: clientId }, { companyId }],
+    })
+
+    console.log(client);
+    if (!client) return null;
+
+    return {};
   } catch (error: any) {
     return mongoErrorHandler(error);
   }

@@ -1,7 +1,4 @@
-import { Mongoose } from "mongoose";
-import contactModel from "../models/client/contactSchema";
 import { IAddress, IContactInfo } from "../types/interfaces";
-import { Error } from "mongoose";
 import clientModel from "../models/client/clientModel";
 import { mongoErrorHandler } from "../helpers/errorHandler";
 
@@ -15,7 +12,7 @@ export async function createNewContact({
 }: IContactInfo) {
   try {
     const client = await clientModel.findOne({
-      "contact.contactInfo": { $elemMatch: { email } },
+      contacts: { $elemMatch: { email } },
     });
 
     if (client) {
@@ -27,7 +24,7 @@ export async function createNewContact({
         { _id: clientId },
         {
           $push: {
-            "contact.contactInfo": {
+            contacts: {
               contactName,
               email,
               status,
@@ -38,9 +35,9 @@ export async function createNewContact({
         },
         { safe: true, upsert: true, new: true }
       )
-      .select("contact.contactInfo");
+      .select("contacts");
 
-    return createContact.contact.contactInfo;
+    return createContact.contacts;
   } catch (error: any) {
     return mongoErrorHandler(error);
   }
@@ -61,7 +58,7 @@ export async function createNewAddress({
       { _id: clientId },
       {
         $push: {
-          "contact.address": {
+          adresses: {
             name,
             street,
             number,
@@ -75,7 +72,7 @@ export async function createNewAddress({
       { safe: true, upsert: true, new: true }
     );
 
-    return createAddress;
+    return createAddress.adresses;
   } catch (error: any) {
     return mongoErrorHandler(error);
   }
@@ -91,24 +88,100 @@ export async function updateContactInfo({
   state,
 }: IContactInfo) {
   try {
-    const updateContact = await clientModel.findOneAndUpdate(
+    const updateContact = await clientModel
+      .findOneAndUpdate(
+        {
+          _id: clientId,
+          "contacts._id": contactId,
+        },
+        {
+          $set: {
+            "contacts.$.contactName": contactName,
+            "contacts.$.email": email,
+            "contacts.$.status": status,
+            "contacts.$.tel": tel,
+            "contacts.$.state": state,
+          },
+        },
+        { new: true }
+      )
+      .select("contacts");
+
+    return updateContact?.contacts;
+  } catch (error: any) {
+    return mongoErrorHandler(error);
+  }
+}
+
+export async function updateAddressInfo({
+  clientId,
+  _id: addressId,
+  name,
+  street,
+  number,
+  district,
+  city,
+  state,
+  zipCode,
+  isMain,
+}: IAddress) {
+  try {
+    const updateAddress = await clientModel.findOneAndUpdate(
       {
         _id: clientId,
-        "contact.contactInfo._id": contactId,
+        "adresses._id": addressId,
       },
       {
         $set: {
-          "contact.contactInfo.$.contactName": contactName,
-          "contact.contactInfo.$.email": email,
-          "contact.contactInfo.$.status": status,
-          "contact.contactInfo.$.tel": tel,
-          "contact.contactInfo.$.state": state,
+          "adresses.$.name": name,
+          "adresses.$.street": street,
+          "adresses.$.number": number,
+          "adresses.$.district": district,
+          "adresses.$.city": city,
+          "adresses.$.state": state,
+          "adresses.$.zipCode": zipCode,
+          "adresses.$.isMain": isMain,
         },
       },
       { new: true }
-    ).select("contact.contactInfo");
+    );
 
-    return updateContact?.contact.contactInfo;
+    return updateAddress?.adresses;
+  } catch (error: any) {
+    return mongoErrorHandler(error);
+  }
+}
+
+export async function deleteContact({ clientId, contactId, companyId }: any) {
+  try {
+    const deleteContact = await clientModel.findOneAndUpdate(
+      { $and: [{ _id: clientId }, { companyId: companyId }] },
+      { $pull: { contacts: { _id: contactId } } }
+      // { new: true }
+    );
+
+    if (!deleteContact) {
+      return null;
+    }
+
+    return {};
+  } catch (error: any) {
+    return mongoErrorHandler(error);
+  }
+}
+
+export async function deleteAddress({ clientId, addressId, companyId }: any) {
+  try {
+    const deleteAddress = await clientModel.findOneAndUpdate(
+      { $and: [{ _id: clientId }, { companyId: companyId }] },
+      { $pull: { adresses: { _id: addressId } } }
+    );
+
+    if (!deleteAddress) {
+      return null;
+    }
+
+    return {};
   } catch (error: any) {
     return mongoErrorHandler(error);
   }

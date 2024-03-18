@@ -21,9 +21,4 @@ const addressSchema = new Schema({
   isMain: { type: Boolean, default: false },
 });
 
-const contactsSchema = new Schema({
-  contactInfo: { type: [contactInfoSchema], default: [] },
-  address: { type: [addressSchema], default: [] },
-});
-
-export default contactsSchema;
+export { contactInfoSchema, addressSchema };

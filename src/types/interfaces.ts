@@ -33,6 +33,7 @@ export interface IContactInfo {
 };
 
 export interface IAddress {
+  _id?: string;
   clientId?: String
   name: string;
   street: string;
@@ -41,4 +42,5 @@ export interface IAddress {
   city: string;
   state: string;
   zipCode: number;
+  isMain?: boolean;
 };

@@ -77,9 +77,14 @@ routes
   .post("/client", middlewares.JWT, clientController.create)
   .get("/clients", middlewares.JWT, clientController.list)
   .put("/client/:clientId", middlewares.JWT, clientController.update)
-  // .delete("/client/:clientId", middlewares.JWT, clientController.remove)
+  .delete("/client/:clientId", middlewares.JWT, clientController.remove)
+  
   .post("/client/:clientId/contact", middlewares.JWT, contactController.createContact)
-  .post("/client/:clientId/address", middlewares.JWT, contactController.createAddress)
   .put("/client/:clientId/contact/:contactId", middlewares.JWT, contactController.updateContact)
+  .delete("/client/:clientId/contact/:contactId", middlewares.JWT, contactController.removeContact)
+
+  .post("/client/:clientId/address", middlewares.JWT, contactController.createAddress)
+  .put("/client/:clientId/address/:addressId", middlewares.JWT, contactController.updateAddress)
+  .delete("/client/:clientId/address/:addressId", middlewares.JWT, contactController.removeAddress);
 
 export default routes;

@@ -1,6 +1,5 @@
 import mongoose from "../../database";
-import contactsSchema from "./contactSchema";
-
+import { contactInfoSchema, addressSchema } from "./contactSchema";
 const { Schema } = mongoose;
 
 const clientsSchema = new Schema({
@@ -39,10 +38,8 @@ const clientsSchema = new Schema({
     type: String,
     required: true,
   },
-  contact: {
-    type: contactsSchema,
-    default: {},
-  },
+  contacts: { type: [contactInfoSchema], default: [] },
+  adresses: { type: [addressSchema], default: [] },
   createdAt: {
     type: Date,
     default: Date.now,
