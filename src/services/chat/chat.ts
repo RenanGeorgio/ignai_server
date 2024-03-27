@@ -1,4 +1,4 @@
-import { io } from "../../app";
+import { io } from "../../index";
 import { OnlineUser } from "../../types/types";
 import middlewares from "../../middlewares";
             // connect to second app

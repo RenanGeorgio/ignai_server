@@ -2,9 +2,9 @@
   "name": "ignai_server",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "index.ts",
   "scripts": {
-    "dev": "ts-node-dev --transpile-only --ignore-watch node_modules ./src/app.ts",
+    "dev": "ts-node-dev --transpile-only --ignore-watch node_modules ./src/index.ts",
     "build": "tsc",
     "prod": "node -r ts-node/register/transpile-only build/index.js"
   },

@@ -1,11 +1,16 @@
 import "express-async-errors";
 import * as dotenv from "dotenv";
 dotenv.config();
-import server from "./server";
+import app from "./server";
 import { Server } from "socket.io";
 import middlewares from "./middlewares";
+import http from "http";
+import corsOrigins from "./config/corsOrigins";
+
 const PORT = process.env.PORT || 7000;
 const HOST = process.env.HOST || "http://localhost";
+
+const server = http.createServer(app);
 
 server.listen(PORT, () => {
   console.log(`Server running on ${HOST}:${PORT}`);
@@ -13,7 +18,7 @@ server.listen(PORT, () => {
 
 const io = new Server(server, {
   cors: {   /// front e chatbot server
-    origin: ["http://localhost:3000", "http://localhost:8000"],
+    origin: corsOrigins,
   },
 });
 

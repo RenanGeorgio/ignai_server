@@ -1,0 +1,38 @@
+version: "3.9"
+
+services:
+  ignai:
+    build: 
+      context: .
+      args:
+        ENV: ${ENV}
+    hostname: ignai
+    container_name: ignai
+    restart: always
+    ports:
+     - "7000:7000"
+    env_file:
+      - .env
+    networks:
+      - mynetwork
+
+  user_control:
+    build: 
+      context: ../supplyfy-user-controll
+      args:
+        ENV: ${ENV}
+    hostname: user_control
+    container_name: user_control
+    restart: always
+    ports:
+     - "4444:4444"
+    env_file:
+      - ../supplyfy-user-controll/.env
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
+    external:
+      name: kafka-chatbot_default
