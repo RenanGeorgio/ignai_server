@@ -13,11 +13,12 @@ server.listen(PORT, () => {
 
 const io = new Server(server, {
   cors: {   /// front e chatbot server
-    origin: ["http://localhost:3000", "http://localhost:8000"],
+    origin: corsOrigins,
   },
 });
 
 io.use(middlewares.socketJWT);
 import "./services";
+import corsOrigins from "./config/corsOrigins";
 
 export { io, server as app };

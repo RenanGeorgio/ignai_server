@@ -3,12 +3,13 @@ import cors from "cors";
 import express, { ErrorRequestHandler, Response } from "express";
 import routes from "./routes";
 import { createServer } from "node:http";
+import corsOrigins from "./config/corsOrigins";
 
 const app = express();
 
 const corsOption = {
   credentials: true,
-  origin: ["http://localhost:3000"], // adicionar outra origem, caso necessário
+  origin: corsOrigins, // adicionar outra origem, caso necessário
 };
 
 app.use(cors(corsOption));
