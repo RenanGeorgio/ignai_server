@@ -20,4 +20,4 @@ const io = new Server(server, {
 io.use(middlewares.socketJWT);
 import "./services";
 
-export { io };
+export { io, server as app };

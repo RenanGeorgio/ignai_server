@@ -19,6 +19,8 @@ import * as clientController from "../controllers/client/clientController";
 
 import * as contactController from "../controllers/client/contactController";
 
+import * as businessController from "../controllers/business/businessController";
+
 const routes = Router();
 
 routes
@@ -85,6 +87,9 @@ routes
 
   .post("/client/:clientId/address", middlewares.JWT, contactController.createAddress)
   .put("/client/:clientId/address/:addressId", middlewares.JWT, contactController.updateAddress)
-  .delete("/client/:clientId/address/:addressId", middlewares.JWT, contactController.removeAddress);
+  .delete("/client/:clientId/address/:addressId", middlewares.JWT, contactController.removeAddress)
+
+  // Business
+  .post("/business", middlewares.JWT, businessController.create)
 
 export default routes;
