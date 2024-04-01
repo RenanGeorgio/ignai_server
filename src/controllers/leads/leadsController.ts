@@ -15,7 +15,7 @@ export const list = async (req: Request, res: Response) => {
   }
 
   const leads = await Leads.find({ companyId: checkUser.companyId });
-  console.log(leads)
+
   return res.status(200).send(leads);
 };
 

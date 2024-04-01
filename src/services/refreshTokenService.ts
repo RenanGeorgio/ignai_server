@@ -34,7 +34,6 @@ const RefreshTokenService = async (refreshToken: string) => {
     { expiresIn: expires_in_refresh_token, subject: userId }
   );
 
-  console.log(newRefreshToken)
   const refreshTokenExpiresDate = dayjs()
     .add(expires_refresh_token_days, "days")
     .toDate();

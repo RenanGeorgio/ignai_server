@@ -2,6 +2,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import express, { ErrorRequestHandler, Response } from "express";
 import routes from "./routes";
+import { createServer } from "node:http";
 
 const app = express();
 
@@ -28,4 +29,5 @@ app.use(((error, req, res, next) => {
   res.status(error.status || 500).send({ message: error.message });
 }) as ErrorRequestHandler);
 
-export default app;
+const server = createServer(app);
+export default server;
