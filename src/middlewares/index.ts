@@ -36,7 +36,7 @@ const socketJWT = async (
   next: (err?: ExtendedError) => void
 ) => {
   try {
-    if(socket.request.headers.host === process.env.CHATBOT_SERVER_URL) {
+    if (socket.handshake.auth.token === process.env.CHATBOT_SERVER_TOKEN) {
       return next();
     }
     else {

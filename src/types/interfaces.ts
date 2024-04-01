@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { Types } from "mongoose";
 
 export interface IJwtPayload {
   sub: string,
@@ -39,4 +39,24 @@ export interface IAddress {
   state: string;
   zipCode: number;
   isMain?: boolean;
+};
+
+export interface IBusiness {
+  _id?: Types.ObjectId;
+  client: Types.ObjectId;
+  assignedTo: Types.ObjectId[];
+  title: string;
+  description: string;
+  sku: string;
+  barCode: string;
+  price: number;
+  includeTax: boolean;
+  files: string[];
+  status: string;
+};
+
+export interface IMongoErrorHandler {
+  success: boolean;
+  message: string;
+  error: string[] | any;
 };
