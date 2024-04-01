@@ -36,7 +36,6 @@ const socketJWT = async (
   next: (err?: ExtendedError) => void
 ) => {
   try {
-    console.log(socket.request.headers)
     if(socket.request.headers.host === process.env.CHATBOT_SERVER_URL) {
       return next();
     }

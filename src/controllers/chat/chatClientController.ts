@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
-import chatUserModel from "../../models/chat/client";
-import ClientModel from "../../models/chat/client";
+import ChatClientModel from "../../models/chat/chatClientModel";
 
 export const listClients = async (req: Request, res: Response) => {
   try {
-    const clients = await ClientModel.find();
+    const clients = await ChatClientModel.find();
 
     return res.status(200).json(clients);
   } catch (error: any) {
@@ -20,7 +19,7 @@ export const createClient = async (req: Request, res: Response) => {
   }
 
   try {
-    const client = new ClientModel({
+    const client = new ChatClientModel({
       name,
       lastName,
       email,
@@ -28,7 +27,7 @@ export const createClient = async (req: Request, res: Response) => {
 
     const savedChatUser = await client.save();
 
-    return res.status(200).json(savedChatUser);
+    return res.status(201).json(savedChatUser);
   } catch (error: any) {
     res.status(500).json(error.message);
   }
@@ -38,7 +37,7 @@ export const findClientByEmail = async (req: Request, res: Response) => {
   const { email } = req.params;
 
   try {
-    const client = await ClientModel.findOne({
+    const client = await ChatClientModel.findOne({
       email,
     });
 
@@ -56,7 +55,7 @@ export const findClientById = async (req: Request, res: Response) => {
   const { _id } = req.params;
 
   try {
-    const client = await ClientModel.findOne({
+    const client = await ChatClientModel.findOne({
       _id,
     });
 

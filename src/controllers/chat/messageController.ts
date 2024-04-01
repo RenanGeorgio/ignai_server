@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import messageModel from "../../models/chat/message";
+import messageModel from "../../models/chat/messageModel";
 
 export const createMessage = async (req: Request, res: Response) => {
   const { chatId, senderId, text } = req.body;
@@ -13,7 +13,7 @@ export const createMessage = async (req: Request, res: Response) => {
 
     const savedMessage = await message.save();
 
-    return res.status(200).json(savedMessage);
+    return res.status(201).json(savedMessage);
   } catch (error: any) {
     res.status(500).json(error.message);
   }
@@ -24,7 +24,7 @@ export const getMessages = async (req: Request, res: Response) => {
 
   try {
     const messages = await messageModel.find({ chatId });
-    return res.status(200).json(messages);
+    return res.status(201).json(messages);
   } catch (error: any) {
     res.status(500).json(error.message);
   }

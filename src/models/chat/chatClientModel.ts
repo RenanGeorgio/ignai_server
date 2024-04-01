@@ -2,7 +2,7 @@ import mongoose from "../../database";
 
 const { Schema } = mongoose;
 
-const clientSchema = new Schema({
+const chatClientSchema = new Schema({
     name: {
         type: String,
         required: true,
@@ -25,6 +25,6 @@ const clientSchema = new Schema({
     },
 });
 
-const ClientModel = mongoose.model("Client", clientSchema);
+const chatClientModel = mongoose.model("chatClient", chatClientSchema);
 
-export default ClientModel;
+export default chatClientModel;
