@@ -1,26 +1,19 @@
+import { randomUUID } from "crypto";
 import mongoose from "../../database";
 
 const { Schema } = mongoose;
 
-const userSchema = new Schema({
-  name: {
+const userTokensSchema = new Schema({
+  userId: {
     type: String,
     required: true,
   },
-  email: {
+  refreshToken: {
     type: String,
     required: true,
   },
-  cpf: {
-    type: String,
-    required: true,
-  },
-  company: {
-    type: String,
-    required: true,
-  },
-  companyId: {
-    type: String,
+  expiresDate: {
+    type: Date,
     required: true,
   },
   createdAt: {
@@ -33,6 +26,6 @@ const userSchema = new Schema({
   },
 });
 
-const User = mongoose.model("User", userSchema);
+const UserTokens = mongoose.model("UserTokens", userTokensSchema);
 
-export default User;
+export default UserTokens;
