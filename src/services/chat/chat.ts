@@ -1,12 +1,11 @@
 import { io } from "../../app";
 import { OnlineUser } from "../../types/types";
 import middlewares from "../../middlewares";
-            // connect to second app
+// connect to second app
 const ChatService = () => {
   let onlineUsers: OnlineUser[] = [];
-
   io.on("connection", (socket) => {
-    console.log("connected")
+    console.log("connected " + socket.id);
     socket.on("addNewUser", (userId: string) => {
       !onlineUsers.some((user: any) => user.userId === userId) &&
         onlineUsers.push({
@@ -22,7 +21,6 @@ const ChatService = () => {
       );
       console.log(receiver)
       if (receiver) {
-        console.log("receiver")
         io.to(receiver.socketId).emit("getMessage", message);
       }
     });

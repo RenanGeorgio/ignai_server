@@ -1,5 +1,5 @@
 {
-  "include": ["src/**/*", "tests/**/*"],
+  "include": ["src/**/*", "tests/**/*", "tests/chatClientController.test.ts"],
   "compilerOptions": {
     "target": "es2016", 
     "module": "commonjs",

@@ -36,10 +36,12 @@ const socketJWT = async (
   next: (err?: ExtendedError) => void
 ) => {
   try {
-    if(socket.request.headers.host === process.env.CHATBOT_SERVER_URL) {
+    if (
+      socket.handshake.auth.token === process.env.SOCKET_SECRET ||
+      socket.handshake.headers?.token === process.env.SOCKET_SECRET
+    ) {
       return next();
-    }
-    else {
+    } else {
       const authHeader = socket.handshake.auth.token;
       const token = authHeader && authHeader.split(" ")[1];
       if (token == null) {
@@ -53,7 +55,6 @@ const socketJWT = async (
       }
       next();
     }
-
   } catch (err: any) {
     if (err.name === "JsonWebTokenError") {
       next(new Error("Invalid JWT."));
